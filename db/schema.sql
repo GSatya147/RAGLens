@@ -35,7 +35,7 @@ CREATE TABLE chunks (
 CREATE INDEX idx_chunks_sparse ON chunks USING GIN (sparse_tsv);
 CREATE INDEX idx_chunks_question ON chunks (question_id);
 
--- 2. Generation RUNS 
+-- 3. Generation RUNS 
 CREATE TABLE runs (
     run_id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     question_id     TEXT NOT NULL REFERENCES questions(question_id),
@@ -63,7 +63,7 @@ CREATE INDEX idx_runs_status ON runs (gen_status) WHERE gen_status != 'done';
 -- Blocks accidental duplicate inserts if the batch driver restarts and doesn't check properly; belt-and-suspenders on top of gen_status.
 CREATE UNIQUE INDEX idx_runs_question_config ON runs (question_id, config_id);
 
--- 3. EVAL_RESULTS 
+-- 4. EVAL_RESULTS 
 CREATE TABLE eval_results (
     eval_id             SERIAL PRIMARY KEY,
     run_id              UUID NOT NULL REFERENCES runs(run_id),
@@ -93,7 +93,7 @@ CREATE UNIQUE INDEX idx_eval_hash ON eval_results (content_hash);
 
 CREATE INDEX idx_eval_status ON eval_results (eval_status) WHERE eval_status != 'done';
 
--- 4. STEP_RESULTS (actual hop-level/step-level)
+-- 5. STEP_RESULTS (actual hop-level/step-level)
 CREATE TABLE step_results (
     step_id             SERIAL PRIMARY KEY,
     run_id              UUID NOT NULL REFERENCES runs(run_id),
@@ -125,7 +125,7 @@ CREATE TABLE step_results (
 -- never recomputed in the dashboard layer.
 CREATE INDEX idx_step_run ON step_results (run_id, step_number);
 
--- 5. ERRORS 
+-- 6. ERRORS 
 CREATE TABLE errors (
     error_id        SERIAL PRIMARY KEY,
     run_id          UUID REFERENCES runs(run_id),
