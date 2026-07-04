@@ -12,7 +12,8 @@ def data_sanity_check(data: DataFrame) -> None:
     print(data.columns)
     print(data.iloc[0])
 
-def data_sampler(data: DataFrame) -> DataFrame:
+def data_sampler() -> DataFrame:
+    data = data_loader(DATA_FILE_PATH)
     # extract hop number from "2hop"...
     data["hop_count"] = data["id"].str.extract(r"^(\d+)hop").astype(int)
 
@@ -32,9 +33,7 @@ def sample_sanity_check(sample: DataFrame) -> None:
     print(sample["id"].duplicated().sum())
 
 if __name__=="__main__":
-    df = data_loader(file_path=DATA_FILE_PATH)
-    data_sanity_check(data=df)
-    sampled = data_sampler(data=df)
+    sampled = data_sampler()
     sample_sanity_check(sample=sampled)
 
 

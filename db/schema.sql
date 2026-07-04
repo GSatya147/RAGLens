@@ -25,7 +25,7 @@ CREATE TABLE chunks (
     token_count     SMALLINT,              
     embedding       VECTOR(384),           
     sparse_tsv      TSVECTOR GENERATED ALWAYS AS (to_tsvector('english', content)) STORED, 
-                                           -- generated column — always in sync with content,
+                                           -- generated column: always in sync with content,
                                            
     created_at      TIMESTAMPTZ DEFAULT now(),
 
