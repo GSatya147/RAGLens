@@ -1,0 +1,20 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16        # official pgvector image, pg16 is the postgres version
+    container_name: raglens_db
+    environment:
+      POSTGRES_USER: ${DB_USER}          # pulled from .env, docker compose reads .env automatically
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"                # host:container, DB_PORT in .env maps to postgres default 5432 inside container
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # named volume, persists data across container restarts, docker manages it
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]  # checks postgres is actually accepting connections, not just started
+      interval: 10s                      # check every 10s
+      timeout: 5s                        # fail if no response in 5s
+      retries: 5                         # mark unhealthy after 5 consecutive failures
+
+volumes:
+  pgdata: 

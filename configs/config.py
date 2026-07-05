@@ -4,6 +4,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+DB_HOST             = os.getenv("DB_HOST")
+DB_NAME             = os.getenv("DB_NAME")
+DB_PASSWORD         = os.getenv("DB_PASSWORD")
+DB_PORT             = os.getenv("DB_PORT")
+DB_USER             = os.getenv("DB_USER")
+
 DATA_FILE_PATH      = "./data/musique_ans_v1.0_dev.jsonl"
 OUPUT_SAMPLE_DATA   = "./data/musique_270.jsonl"
 
