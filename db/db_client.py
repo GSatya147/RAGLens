@@ -32,9 +32,9 @@ def db_connection(pool=None):
         pool.putconn() if pool else conn.close()
 
 def execute_query(sql: str, params: tuple | None=None, pool=None) -> list[str, Any]:
-    "execute a SELECT queriy and return all rows as list[field, value]."
+    "execute a SELECT query and return all rows as list[field, value]."
     with db_connection(pool=pool) as conn:
-        with conn.cursor(cursor_factor = psycopg2.extras.RealDictCursor) as cur:
+        with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
             cur.execute(sql, params)
             return [row for row in cur.fetchall()]
 

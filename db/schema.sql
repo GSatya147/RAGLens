@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS step_results (
 
     -- step-level faithfulness: LLM-as-Judge
     step_faithful             BOOLEAN,
-    step_faithful_reason      TEXT,          -- one-sentence judge explanation, renders in the dashboard's red-step diagnostic view, not just the score
+    step_faithful_reason      TEXT,           -- one-sentence judge explanation, renders in the dashboard's red-step diagnostic view, not just the score
 
     -- retrieval metadata (tracer data)
     sub_query            TEXT,
