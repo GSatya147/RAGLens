@@ -30,6 +30,7 @@ def document_builder(entry: dict) -> Document:
             "is_supporting" : entry.get("is_supporting"),
             "title"         : entry.get("title"),
             "paragraph_id"  : entry.get("paragraph_id"),
+            "hop_count"     : entry.get("hop_count"),
             "embedding"     : None
         }
     )
@@ -44,6 +45,7 @@ def corpus_chunker(paragraph_list: list[dict]) -> list[dict]:
         if node.text:
             chunk_list.append({
                 "question_id"   : node.metadata.get("question_id"),
+                "hop_count"     : node.metadata.get("hop_count"),
                 "is_supporting" : node.metadata.get("is_supporting"),
                 "title"         : node.metadata.get("title"),
                 "content"       : node.text,

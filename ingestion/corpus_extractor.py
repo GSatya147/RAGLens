@@ -15,10 +15,13 @@ def corpus_extractor(df: DataFrame) -> list[dict]:
             for i in row["paragraphs"]:
                 field: dict = {
                     "question_id"   : row["id"],
-                    "paragraph_text": i.get("paragraph_text"),
-                    "is_supporting" : i.get("is_supporting"),
+                    "hop_count"     : row["hop_count"],
                     "title"         : i.get("title"),
-                    "paragraph_id"  : i.get("idx")
+                    "question_text" : row["question"],
+                    "paragraph_text": i.get("paragraph_text"),
+                    "paragraph_id"  : i.get("idx"),
+                    "is_supporting" : i.get("is_supporting"),
+                    "answer"        : row["answer"]
                 }
                 flattened.append(field)
                 f.write(json.dumps(field) + "\n")
