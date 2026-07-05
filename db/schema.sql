@@ -7,7 +7,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;   -- needed for gen_random_uuid() on ru
 -- 1. QUESTIONS (source of truth for question text + ground truth answer, primary key question_id
 -- and the Streamlit dashboard (Phase 9) read question text/answer from here
 -- populated once in Phase 1 from musique_270.jsonl. FastAPI
-CREATE TABLE questions (
+CREATE TABLE IF NOT EXISTS questions (
     question_id               TEXT PRIMARY KEY,
     hop_count                 SMALLINT NOT NULL CHECK (hop_count IN (2,3,4)),
     question_text             TEXT NOT NULL,
@@ -16,14 +16,14 @@ CREATE TABLE questions (
 );
 
 -- 2. CORPUS / VECTOR STORE 
-CREATE TABLE chunks (
+CREATE TABLE IF NOT EXISTS chunks (
     chunk_id        SERIAL PRIMARY KEY,
     question_id     TEXT NOT NULL REFERENCES questions(question_id),
     hop_count       SMALLINT NOT NULL,     -- denormalized from questions, avoids a join on every retrieval call during the 810-run sweep
     is_supporting   BOOLEAN NOT NULL,      -- MuSiQue ground truth label, THE deterministic ground truth Phase 5's hop-level metrics match against
     content         TEXT NOT NULL,
     token_count     SMALLINT,              
-    embedding       VECTOR(1024),           
+    embedding       vector(1024) NOT NULL,           
     sparse_tsv      TSVECTOR GENERATED ALWAYS AS (to_tsvector('english', content)) STORED, 
                                            -- generated column: always in sync with content,
                                            
@@ -32,11 +32,11 @@ CREATE TABLE chunks (
     UNIQUE (question_id, content)          -- idempotency backstop, reruns of the ingestion script during dev can't silently duplicate chunks
 );
 
-CREATE INDEX idx_chunks_sparse ON chunks USING GIN (sparse_tsv);
-CREATE INDEX idx_chunks_question ON chunks (question_id);
+CREATE INDEX IF NOT EXISTS idx_chunks_sparse ON chunks USING GIN (sparse_tsv);
+CREATE INDEX IF NOT EXISTS idx_chunks_question ON chunks (question_id);
 
 -- 3. Generation RUNS 
-CREATE TABLE runs (
+CREATE TABLE IF NOT EXISTS runs (
     run_id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     question_id     TEXT NOT NULL REFERENCES questions(question_id),
     config_id       TEXT NOT NULL CHECK (config_id IN ('naive', 'advanced', 'hybrid')),
@@ -58,13 +58,13 @@ CREATE TABLE runs (
 );
 
 -- resume queries only ever look for non-done rows, so index only those. 
-CREATE INDEX idx_runs_status ON runs (gen_status) WHERE gen_status != 'done';
+CREATE INDEX IF NOT EXISTS idx_runs_status ON runs (gen_status) WHERE gen_status != 'done';
 
 -- Blocks accidental duplicate inserts if the batch driver restarts and doesn't check properly; belt-and-suspenders on top of gen_status.
-CREATE UNIQUE INDEX idx_runs_question_config ON runs (question_id, config_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_runs_question_config ON runs (question_id, config_id);
 
 -- 4. EVAL_RESULTS 
-CREATE TABLE eval_results (
+CREATE TABLE IF NOT EXISTS eval_results (
     eval_id             SERIAL PRIMARY KEY,
     run_id              UUID NOT NULL REFERENCES runs(run_id),
 
@@ -89,12 +89,12 @@ CREATE TABLE eval_results (
 );
 
 -- the cache check. Before any judge API call
-CREATE UNIQUE INDEX idx_eval_hash ON eval_results (content_hash);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_eval_hash ON eval_results (content_hash);
 
-CREATE INDEX idx_eval_status ON eval_results (eval_status) WHERE eval_status != 'done';
+CREATE INDEX IF NOT EXISTS idx_eval_status ON eval_results (eval_status) WHERE eval_status != 'done';
 
 -- 5. STEP_RESULTS (actual hop-level/step-level)
-CREATE TABLE step_results (
+CREATE TABLE IF NOT EXISTS step_results (
     step_id             SERIAL PRIMARY KEY,
     run_id              UUID NOT NULL REFERENCES runs(run_id),
     step_number         SMALLINT NOT NULL,   -- 1st hop, 2nd hop, etc.
@@ -123,10 +123,10 @@ CREATE TABLE step_results (
 -- this table is what the dashboard's Trace Inspector and
 -- Single Query View read directly: green/yellow/red coloring is derived from step_faithful + context_precision here,
 -- never recomputed in the dashboard layer.
-CREATE INDEX idx_step_run ON step_results (run_id, step_number);
+CREATE INDEX IF NOT EXISTS idx_step_run ON step_results (run_id, step_number);
 
 -- 6. ERRORS 
-CREATE TABLE errors (
+CREATE TABLE IF NOT EXISTS errors (
     error_id        SERIAL PRIMARY KEY,
     run_id          UUID REFERENCES runs(run_id),
     stage           TEXT CHECK (stage IN ('generation','evaluation')),
