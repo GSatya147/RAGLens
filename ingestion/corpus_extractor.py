@@ -6,7 +6,7 @@ from pandas import DataFrame
 from ingestion.data_sampler import data_sampler
 from configs.config import OUPUT_SAMPLE_DATA
 
-def corpus_exctractor(df: DataFrame) -> list[dict]:
+def corpus_extractor(df: DataFrame) -> list[dict]:
     df = pd.read_json(OUPUT_SAMPLE_DATA, lines=True, encoding="utf=8")
 
     flattened = []
@@ -27,7 +27,7 @@ def corpus_exctractor(df: DataFrame) -> list[dict]:
 
 if __name__=="__main__":
     sampled: DataFrame = data_sampler()
-    flattened: list[dict] = corpus_exctractor(df=sampled)
+    flattened: list[dict] = corpus_extractor(df=sampled)
     print(len(flattened))
     print(flattened[0])
 
