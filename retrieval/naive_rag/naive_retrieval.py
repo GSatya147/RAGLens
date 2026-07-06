@@ -1,10 +1,12 @@
 from llama_index.core import QueryBundle
 from llama_index.core.schema import NodeWithScore, TextNode
 from llama_index.core.retrievers import BaseRetriever
+from langfuse import observe
 
 from db.db_client import execute_query
 from retrieval.query_embedder import query_embedder
 
+@observe(as_type="retriever")
 class NaiveRetriever(BaseRetriever):
     def __init__(self, top_k: int = 5):
         self.top_k = top_k

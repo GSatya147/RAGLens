@@ -3,14 +3,14 @@ from typing import List
 from llama_index.core import QueryBundle
 from llama_index.core.retrievers import BaseRetriever
 from llama_index.core.schema import NodeWithScore, TextNode
-import voyageai
+from langfuse import observe
 
 from db.db_client import execute_query
 from retrieval.advanced_rag.mmr import mmr_select
 from retrieval.advanced_rag.reranker import Reranker
 from retrieval.query_embedder import query_embedder
 
-
+@observe(as_type="retriever")
 class AdvancedRetriever(BaseRetriever):
     """Config 2: dense (top_k=10) -> MMR diversity selection -> cross-encoder rerank -> top 5."""
 

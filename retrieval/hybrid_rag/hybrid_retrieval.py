@@ -2,6 +2,7 @@ from typing import List
 from llama_index.core import QueryBundle
 from llama_index.core.retrievers import BaseRetriever
 from llama_index.core.schema import NodeWithScore, TextNode
+from langfuse import observe
 
 from db.db_client import execute_query
 from retrieval.query_embedder import query_embedder
@@ -9,6 +10,7 @@ from retrieval.advanced_rag.reranker import Reranker
 from retrieval.hybrid_rag.rrf import rrf_fuse
 from retrieval.hybrid_rag.bm25 import build_bm25_index
 
+@observe(as_type="retriever")
 class HybridRetriever(BaseRetriever):
     """Config 3: dense + BM25 (Postgres tsvector) fused via RRF -> cross-encoder rerank -> top 5."""
 
