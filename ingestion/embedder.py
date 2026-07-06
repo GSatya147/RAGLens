@@ -27,7 +27,7 @@ class Embedder():
         try:
             for chunk in chunk_list:
                 if running_tokens + chunk["token_count"] >= BATCH_SIZE:
-                    embeddings+= vo_client.embed(texts=batch, model=EMBEDDING_MODEL, output_dimension=1024).embeddings
+                    embeddings+= vo_client.embed(texts=batch, model=EMBEDDING_MODEL, output_dimension=1024, input_type="document").embeddings
                     running_tokens = 0
                     batch = []
                 
