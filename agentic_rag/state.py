@@ -31,6 +31,7 @@ class AgentState(TypedDict):
 
     # control
     step_counter: int
+    limiter: int
     refine_reason: Optional[str]    # reasoning -> decomposition
 
     # output
