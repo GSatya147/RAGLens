@@ -7,9 +7,11 @@ from litellm import (
     AuthenticationError, 
     BadRequestError
 )
+from langfuse import observe
 
 from configs.config import DEEPSEEK_API_KEY, DEEPSEEK_MODEL
 
+@observe(as_type="generation")
 class Client:
     def __init__(self):
         pass
