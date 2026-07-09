@@ -16,13 +16,14 @@ class Client:
     def __init__(self):
         pass
 
-    def generate_response(self, messages):
+    def generate_response(self, messages: list[dict], temperature: int | None=0.3) -> dict:
         try:
             response = completion(
                 api_key=DEEPSEEK_API_KEY,
                 model=DEEPSEEK_MODEL,
                 messages=messages,
                 # max_tokens=500,
+                temperature=temperature,
                 num_retries=3
             )
 
@@ -52,5 +53,5 @@ class Client:
 
 if __name__=="__main__":
        obj = Client()
-       result = obj.generate_response([{"role": "system", "content" : "You are a friendly english speaking user assistant"}, {"role": "user", "content" : "Hello"}])
+       result: dict = obj.generate_response([{"role": "system", "content" : "You are a friendly english speaking user assistant"}, {"role": "user", "content" : "Hello"}])
        print(result)
