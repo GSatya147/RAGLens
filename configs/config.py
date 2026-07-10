@@ -16,6 +16,8 @@ OUPUT_SAMPLE_DATA   = "./data/musique_270.jsonl"
 EMBEDDING_TOKENIZER = "voyageai/voyage-4-nano"
 EMBEDDING_MODEL     = "voyage-4-lite"
 
+DEEPSEEK_MODEL      = "deepseek/deepseek-v4-flash"
+
 VOYAGE_API_KEY      = os.getenv("VOYAGE_API_KEY")
 DEEPSEEK_API_KEY    = os.getenv("DEEPSEEK_API_KEY")
 
