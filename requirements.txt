@@ -1,2 +1,6 @@
 pandas==2.2.3
 llamaindex-core
+rank-bm25
+langfuse
+langgraph
+
