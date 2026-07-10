@@ -1,6 +1,5 @@
+from operator import add
 from typing import Annotated, TypedDict, Literal, Optional
-
-from langgraph.graph.message import add_messages
 
 class RetrievalStep(TypedDict):
     step_number: int
@@ -24,17 +23,23 @@ class AgentState(TypedDict):
 
     # working data
     original_query: str
-    sub_queries: Annotated[list[str], add_messages]
-    retrieval_steps: Annotated[list[RetrievalStep], add_messages]
-    reasoning_steps: Annotated[list[ReasoningStep], add_messages]
-    accumulated_context: str
+    sub_queries: Annotated[list[str], add]
+    retrieval_steps: Annotated[list[RetrievalStep], add]
+    reasoning_steps: Annotated[list[ReasoningStep], add]
+    accumulated_context: Annotated[str, add]
 
     # control
     step_counter: int
-    limiter: int
+    reasoning_counter: int
+    retrieval_counter: int
     refine_reason: Optional[str]    # reasoning -> decomposition
 
     # output
     final_answer: Optional[str]
     status: Literal["running", "completed", "failed", "insufficient_context"]
     error: Optional[str]
+
+if __name__=="__main__":
+    obj = ReasoningStep(refine_reason="hi")
+    obj1 = AgentState(reasoning_steps=[obj])
+    print(obj1["reasoning_steps"][-1].get("refine_reason"))
