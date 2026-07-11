@@ -6,7 +6,7 @@ class RetrievalStep(TypedDict):
     sub_query: str
     retrieved_chunks: list[dict]
     raw_scores: list[float]
-    noramlised_scores: list[float]  # based on rank/placement
+    normalised_scores: list[float]  # based on rank/placement
     latency_ms: float
 
 class ReasoningStep(TypedDict):
