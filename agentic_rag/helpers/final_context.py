@@ -20,6 +20,16 @@ the correct answer from your own training.
 - Keep the answer as short as possible while still being complete — a
   name, a date, a place, a short phrase. Do not write full sentences
   unless the question requires one.
+- When a passage describes multiple people with similar or parallel
+  relationships (e.g. several "his wife (Actress)" mentions, several
+  characters each introduced with a spouse, sibling, or role), resolve
+  this by checking which named person's introduction immediately
+  precedes each pronoun or possessive ("his", "her", "their"). This
+  check is usually sufficient to answer confidently — multiple similar
+  mentions in a passage are NOT by themselves a reason to say
+  "insufficient context." Only answer "insufficient context" if, after
+  this check, the passage still does not make clear which person the
+  question is asking about.
 </constraints>
 
 <examples>
@@ -35,6 +45,22 @@ the correct answer from your own training.
 <question>What is the capital of the country where the director of "Oppenheimer" was born?</question>
 <context>Christopher Nolan directed Oppenheimer. Nolan has won several awards for his filmmaking.</context>
 <output>insufficient context</output>
+</example>
+
+<example>
+<scenario>multiple_similar_entities</scenario>
+<question>Who plays the wife of Rob's character in the film?</question>
+<context>His wife Deanne (Maya Rudolph), the primary breadwinner of the family, is pregnant with another child. Rob, nicknamed Carrot, has been divorced three times. His current wife, Gloria (Joyce Van Patten), is 30 years older than him.</context>
+<output>Joyce Van Patten</output>
+<note>
+Two "his wife (Actress)" statements appear. Checking which name precedes
+each: "His wife Deanne (Maya Rudolph)" follows an unnamed "his" (a
+different character, not Rob, based on context before this excerpt).
+"His current wife, Gloria (Joyce Van Patten)" directly follows Rob's
+introduction. This check resolves the question fully — answer directly,
+do not treat the presence of two similar mentions as grounds for
+"insufficient context."
+</note>
 </example>
 </examples>"""
 
