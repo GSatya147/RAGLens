@@ -12,6 +12,7 @@ DB_USER             = os.getenv("DB_USER")
 
 DATA_FILE_PATH      = "./data/musique_ans_v1.0_dev.jsonl"
 OUPUT_SAMPLE_DATA   = "./data/musique_270.jsonl"
+TRACE_DIR           = "./traces/"
 
 EMBEDDING_TOKENIZER = "voyageai/voyage-4-nano"
 EMBEDDING_MODEL     = "voyage-4-lite"
