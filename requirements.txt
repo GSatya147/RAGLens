@@ -3,4 +3,5 @@ llamaindex-core
 rank-bm25
 langfuse
 langgraph
+streamlit
 
