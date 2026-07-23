@@ -32,7 +32,7 @@ def run_agent_pipeline(question_id: str, hop_count: int, user_query: str, config
 
     trace: dict = assemble_trace(final_state=result)
     path = write_trace(trace=trace, output_dir=TRACE_DIR)
-    return result
+    return trace
 
 if __name__=="__main__":
     result = run_agent_pipeline("What date saw the writing of the song where the devil went down to the state where WDXQ is located?")

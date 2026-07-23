@@ -35,6 +35,7 @@ class AgentGraph:
 
         try:
             self.graph.invoke(initial_state, config=config)
+
         except Exception as e:
             partial = self.graph.get_state(config=config)
             result = dict(partial.values)
