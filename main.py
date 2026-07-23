@@ -5,7 +5,7 @@ from evaluation_pipeline.evaluate import evaluate_trace
 from db.db_client import execute_query
 
 batch_size = 5
-offset = 103
+offset = 200
 
 i=0
 while i<4:
